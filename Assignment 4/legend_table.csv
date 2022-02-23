@@ -1,0 +1,35 @@
+agg_categoryValue,Aggregated_class,agg_categoryName,Class,categoryValue,categoryName,Color
+18,Agriculture,Ag,Agriculture,18,Ag,#E974ED
+18,Agriculture,Ag,Citrus,47,Ct,#d082de
+18,Agriculture,Ag,Coffe,46,Cf,#cca0d4
+18,Agriculture,Ag,Forest Plantation,9,FP,#ad4413
+18,Agriculture,Ag,Mosaic of Agriculture and Pasture,21,Mo,#fff3bf
+18,Agriculture,Ag,Mosaic of Crops,42,MC,#FFFFB2
+18,Agriculture,Ag,Other Perennial Crops,48,OP,#cd49e4
+18,Agriculture,Ag,Other temporary Crops,41,OT,#e787f8
+18,Agriculture,Ag,Perennial Corp,36,PC,#f3b4f1
+18,Agriculture,Ag,Rice,40,Rc,#982c9e
+18,Agriculture,Ag,Soy Beans,39,SB,#e075ad
+18,Agriculture,Ag,Sugar Cane,20,SC,#C27BA0
+18,Agriculture,Ag,Temporary Crop,19,TC,#D5A6BD
+1,Forest,Fo,Forest,1,Fo,#129912
+1,Forest,Fo,Forest Formation,3,FF,#006400
+1,Forest,Fo,Magrove,5,Mg,#687537
+1,Forest,Fo,Savanna Formation,4,SF,#00ff00
+1,Forest,Fo,Wooded Restinga,49,WR,#6b9932
+10,Non forest Natural Formation,Nf,"Grassland (Pastizal, Formación Herbácea)",12,GL,#B8AF4F
+10,Non forest Natural Formation,Nf,Non Forest Natural Formation,10,Nf,#BBFCAC
+10,Non forest Natural Formation,Nf,Other Non Forest Natural Formation,13,OF,#f1c232
+10,Non forest Natural Formation,Nf,Rocky outcrop,29,RO,#665a3a
+10,Non forest Natural Formation,Nf,Salt flat,32,Sa,#968c46
+10,Non forest Natural Formation,Nf,Wetland,11,WL,#45C2A5
+27,Non observed,No,Non Observed,27,No,#D5D5E5
+22,Non-vegetated area,Nv,Beach and Dune,23,BD,#DD7E6B
+22,Non-vegetated area,Nv,Mining,30,Mn,#af2a2a
+22,Non-vegetated area,Nv,Non vegetated Area,22,Nv,#EA9999
+22,Non-vegetated area,Nv,Other Non Vegetated Area,25,ON,#ff3d3d
+22,Non-vegetated area,Nv,Urban Infrastructure,24,UA,#aa0000
+15,Pasture,Pa,Pasture,15,Pa,#FFD966
+26,Water,Wa,Aquaculture,31,Aq,#02106f
+26,Water,Wa,"River, Lake and Ocean",33,RL,#0000FF
+26,Water,Wa,Water,26,Wa,#0000FF
