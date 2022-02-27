@@ -12,7 +12,6 @@ This file has all the plot codes used in the research assignment
 '''
 
 ### packages ###
-from sqlalchemy import create_engine
 import pandas as pd
 import datetime as dt
 import matplotlib.pyplot as plt
@@ -22,29 +21,24 @@ import matplotlib.dates as mdates
 from matplotlib.ticker import FuncFormatter
 
 # =============================================================================
-# Data used on the plot
+# Data used on the plot - Imported from GitHub repository
 # =============================================================================
 
-engine = create_engine(
-    'sqlite:////Users/rafaellincoln/Desktop/PUC-Rio/Estatística/Trabalho_Chile_PUCRio/Bases de dados/all_vars_chile.db')
 
-# Data qith variables of interest
-df_final = pd.read_sql('variaveis chile',engine)\
-            .set_index('dates')
+# Data with variables of interest            
+df_final = pd.read_csv('https://raw.githubusercontent.com/Rlincoln01/Trabalho_Chile_PUCRio/main/Bases%20de%20dados/base_completa_chile.csv')
             
-engine = create_engine(
-    'sqlite:////Users/rafaellincoln/Desktop/PUC-Rio/Estatística/Trabalho_Chile_PUCRio/Bases de dados/chile_tt.db')
+df_final = df_final.assign(dates = pd.to_datetime(df_final.dates)).set_index('dates')
 
 # Raw data
-df_tt = pd.read_sql('twitter trends chile',engine)
-
+df_tt = pd.read_csv('https://raw.githubusercontent.com/Rlincoln01/Trabalho_Chile_PUCRio/main/Bases%20de%20dados/twitter_trends_chile.csv')\
+    
+df_tt.dates = pd.to_datetime(df_tt.dates)
 
 # Hashtags of political background database
-
-filepath = "/Users/rafaellincoln/Desktop/PUC-Rio/Estatística/Trabalho_Chile_PUCRio/Bases de dados/Hashtags.xlsx"
-
-df_pol = pd.read_excel(filepath, sheet_name = 'DF')\
-            .drop_duplicates()
+            
+df_pol = pd.read_csv("https://raw.githubusercontent.com/Rlincoln01/Trabalho_Chile_PUCRio/main/Bases%20de%20dados/Hashtags.csv")\
+            .drop('Unnamed: 0', axis =1)
 
 # =============================================================================
 # Plots
@@ -168,7 +162,7 @@ ax[0,1].set_title('6th to 10th')
 ax[1,0].set_title('11th to 15th')
 ax[1,1].set_title('16th to 20th')
 
-plt.suptitle('Volume de Tweets por Trending Topic - Top 20 Chile',
+plt.suptitle('Volume de Tweets por Trending Topic - Top 20 Chile\n 15 a 20 de Outubro',
              fontsize = 25,
              ha = 'center')
 
@@ -217,7 +211,7 @@ ax[0,1].set_title('6th to 10th')
 ax[1,0].set_title('11th to 15th')
 ax[1,1].set_title('16th to 20th')
 
-plt.suptitle('Volume de Tweets por Trending Topic - Top 20 Chile',
+plt.suptitle('Volume de Tweets por Trending Topic - Top 20 Chile\n 21 a 26 de Outubro',
              fontsize = 25,
              ha = 'center')
 
