@@ -19,18 +19,13 @@ hypthesis and assumptions.
 
 ### Packages ###
 import pandas as pd
-from sqlalchemy import create_engine
+
 
 # statistics pakages for regression
 from statsmodels.discrete.discrete_model import Probit
-import statsmodels.stats.api as sms
-from statsmodels.compat import lzip
 from statsmodels.tools.tools import add_constant
 import statsmodels.api as sm
 
-#engine from database
-
-engine = create_engine('sqlite:////Users/rafaellincoln/Desktop/PUC-Rio/Estatística/Trabalho_Chile_PUCRio/Bases de dados/all_vars_chile.db')
 
 
 # =============================================================================
@@ -44,20 +39,65 @@ the PPI variable, of the functional form: NoH(t) = b0 + b1PPI(t) + e(t)
     
 '''
 
-model1 = pd.read_sql('variaveis chile', engine)\
-    [['dates','pol_pct','Atendimentos de emergência']]\
-        .set_index('dates').dropna(axis = 0)
+# Read variables used in this model
+data = pd.read_csv('https://raw.githubusercontent.com/Rlincoln01/Trabalho_Chile_PUCRio/main/Bases%20de%20dados/base_completa_chile.csv')
+            
+data = data.assign(dates = pd.to_datetime(data.dates)).set_index('dates')\
+             [['pol_pct','Atendimentos de emergência','is_protest']].dropna(axis=0)
+
 
 # Variável exógena
-Y = model1['Atendimentos de emergência']
+Y = data['Atendimentos de emergência']
 
 # Variável endôgena
-X = model1.pol_pct
+X = data.pol_pct
 
 # add constant (b0)
 X = add_constant(X)
 
 results = sm.OLS(Y,X).fit()
+
+# ==== Model 1 with lags on PPI variable ==== #
+
+#Create lagged variables
+for x in range(1,25):
+    var_name = f'lag_{x}'
+    data[var_name] = data.pol_pct.shift(-x)
+
+# Base model
+
+columns = ['Coeficiente','P-Valor T','P-Valor F','RSquared']
+
+df_results = pd.DataFrame(data = 
+                          [[round(results.params['pol_pct'],4),
+                           round(results.pvalues['pol_pct'],4),
+                           round(results.f_pvalue,4),
+                           results.rsquared]],
+                        columns = columns)
+
+
+# Add lags and compare models
+for x in range(1,25):
+    
+    X = data[f'lag_{x}'].dropna()
+    
+    # add constant (b0)
+    X = add_constant(X)
+
+    # 
+    Y = data[['Atendimentos de emergência',f'lag_{x}']].dropna(axis=0)['Atendimentos de emergência']
+
+    results = sm.OLS(Y,X).fit()
+    
+    row = [[round(results.params[f'lag_{x}'],4),
+                           round(results.pvalues[f'lag_{x}'],4),
+                           round(results.f_pvalue,4),
+                           results.rsquared]]
+    
+    df_results = df_results.append(pd.DataFrame(row, columns = columns),
+                                                ignore_index = True)
+    
+
 
 # =============================================================================
 # Model 2
@@ -72,21 +112,52 @@ P(Y=1|PPI(t)) = b0 + b1PPI(t) + e(t)
     
 '''
 
-model2 = pd.read_sql('variaveis chile',engine)\
-    [['dates','pol_pct','is_protest']]
 
-Y = model2['is_protest']
+Y = data['is_protest']
 
-X = model2[['pol_pct']]
+X = data[['pol_pct']]
 
 X = add_constant(X)
 
-model_1 = Probit(Y,X)
+model_2 = Probit(Y,X)
  
-results = model_1.fit()
+results = model_2.fit()
 
+# ==== Model 2 with lags on PPI variable ==== #
 
+#Create lagged variables
+for x in range(1,25):
+    var_name = f'lag_{x}'
+    data[var_name] = data.pol_pct.shift(-x)
 
+# Base model
 
+columns = ['Coeficiente','P-Valor T','Pseudo-RSquared']
 
+df_results = pd.DataFrame(data = 
+                          [[round(results.params['pol_pct'],4),
+                           round(results.pvalues['pol_pct'],4),
+                           results.prsquared]],
+                        columns = columns)
+
+# Add lags and compare models
+for x in range(1,25):
+    
+    X = data[f'lag_{x}'].dropna()
+    
+    # add constant (b0)
+    X = add_constant(X)
+
+    # 
+    Y = data[['is_protest',f'lag_{x}']].dropna(axis=0)['is_protest']
+
+    results = Probit(Y,X).fit()
+    
+    row = [[round(results.params[f'lag_{x}'],4),
+                           round(results.pvalues[f'lag_{x}'],4),
+                           results.prsquared]]
+    
+    df_results = df_results.append(pd.DataFrame(row, columns = columns),
+                                                ignore_index = True)
+    
 
